@@ -1,8 +1,11 @@
 package spark.serverV2.controller;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import spark.serverV2.domain.ParkingInfo;
@@ -15,6 +18,8 @@ import java.util.Optional;
 @RestController
 public class ApiController {
     private final ParkingService parkingService;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     ApiController(ParkingService parkingService){
@@ -97,5 +102,18 @@ public class ApiController {
             e.printStackTrace();
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update the data.");
         }
+    }
+
+    @GetMapping("/parking/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id){
+        parkingService.deleteParkingInfo(id);
+        return ResponseEntity.ok("Data delete successfully.");
+    }
+
+
+    @GetMapping("/parking/deleteAll/")
+    public ResponseEntity<String> deleteAll(){
+        parkingService.deleteAll();
+        return ResponseEntity.ok("Data delete all successfully.");
     }
 }

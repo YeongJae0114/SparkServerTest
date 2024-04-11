@@ -1,5 +1,7 @@
 package spark.serverV2.service.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,8 @@ import java.util.Optional;
 @Service
 public class ParkingServiceImpl implements ParkingService {
     private final ParkingInfoRepository parkingInfoRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     ParkingServiceImpl(ParkingInfoRepository parkingInfoRepository){
@@ -36,5 +40,16 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public Optional<ParkingInfo> getParkingInfoById(Long id) {
         return parkingInfoRepository.findById(id);
+    }
+
+    @Override
+    public void deleteParkingInfo(Long id) {
+        parkingInfoRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public void deleteAll() {
+        entityManager.createQuery("DELETE FROM ParkingInfo").executeUpdate();
     }
 }

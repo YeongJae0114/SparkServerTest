@@ -12,5 +12,8 @@ public interface ParkingService {
 
    Optional<ParkingInfo>getParkingInfoById(Long id);
 
+   void deleteParkingInfo(Long id);
+
+   void deleteAll();
 
 }
