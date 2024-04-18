@@ -26,6 +26,11 @@ public class ApiController {
         this.parkingService = parkingService;
     }
 
+    @GetMapping("/health")
+    public String healthCheck() {
+        return "OK";  // 또는 다른 성공 메시지
+    }
+
     @GetMapping("/parking")
     public List<ParkingInfo> getAllParkingInfo() {
         return parkingService.getAllParkingInfo();
